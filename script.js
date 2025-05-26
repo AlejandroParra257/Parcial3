@@ -1,3 +1,4 @@
+const url = 'mysql://root:zBtcAmIkxLzxFbVVvUGWPlchohdIDfwv@interchange.proxy.rlwy.net:46438/railway';
 const btnMostrarTabla = document.getElementById('btnMostrarTabla');
     const btnMostrarFormulario = document.getElementById('btnMostrarFormulario');
     const tablaJugadores = document.getElementById('tabla-jugadores');
