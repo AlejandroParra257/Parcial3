@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Jugadores de Béisbol</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #1e1e1e;
+      color: #f0f0f0;
+      margin: 0;
+      padding: 30px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #e74c3c;
+      margin-bottom: 30px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .jugador-card {
+      background-color: #2c2c2c;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: transform 0.2s;
+    }
+
+    .jugador-card:hover {
+      transform: scale(1.01);
+    }
+
+    .info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .info span {
+      margin: 2px 0;
+    }
+
+    .acciones {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      color: white;
+      font-size: 14px;
+    }
+
+    .btn-danger {
+      background-color: #e74c3c;
+    }
+
+    .btn-toggle {
+      background-color: #444;
+      margin-bottom: 15px;
+    }
+
+    #formulario {
+      margin-top: 30px;
+      background-color: #2c2c2c;
+      padding: 20px;
+      border-radius: 12px;
+      display: none;
+    }
+
+    .form-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    input {
+      background-color: #1a1a1a;
+      color: white;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #555;
+      width: calc(50% - 10px);
+    }
+
+    input::placeholder {
+      color: #aaa;
+    }
+
+    @media (max-width: 600px) {
+      input {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Jugadores de Béisbol</h1>
+
+  <div class="container">
+    <div id="contenedor-jugadores"></div>
+
+    <button class="btn btn-toggle" onclick="toggleFormulario()">➕ Agregar Jugador</button>
+
+    <form id="formulario">
+      <div class="form-group">
+        <input type="number" id="id" placeholder="ID" required />
+        <input type="text" id="nombre" placeholder="Nombre" required />
+        <input type="text" id="apellido" placeholder="Apellido" required />
+        <input type="text" id="posicion" placeholder="Posición" required />
+        <input type="number" id="numero" placeholder="Número de camiseta" required />
+      </div>
+      <button class="btn btn-danger" type="submit">Guardar jugador</button>
+    </form>
+  </div>
+
+  <script>
+    const contenedor = document.getElementById("contenedor-jugadores");
+    const formulario = document.getElementById("formulario");
+
+    function cargarJugadores() {
+      fetch("http://localhost:3000/jugadores")
+        .then(res => res.json())
+        .then(data => {
+          contenedor.innerHTML = "";
+          data.forEach(j => {
+            const card = document.createElement("div");
+            card.className = "jugador-card";
+            card.innerHTML = `
+              <div class="info">
+                <span><strong>ID:</strong> ${j.id}</span>
+                <span><strong>Nombre:</strong> ${j.nombre}</span>
+                <span><strong>Apellido:</strong> ${j.apellido}</span>
+                <span><strong>Posición:</strong> ${j.posicion}</span>
+                <span><strong>Número:</strong> ${j.numero_camiseta}</span>
+              </div>
+              <div class="acciones">
+                <button class="btn btn-danger" onclick="eliminar(${j.id})">Eliminar</button>
+              </div>
+            `;
+            contenedor.appendChild(card);
+          });
+        });
+    }
+
+    function eliminar(id) {
+      fetch(`http://localhost:3000/jugadores/${id}`, {
+        method: "DELETE"
+      }).then(() => cargarJugadores());
+    }
+
+    function toggleFormulario() {
+      formulario.style.display = formulario.style.display === "none" ? "block" : "none";
+    }
+
+    formulario.addEventListener("submit", async e => {
+      e.preventDefault();
+
+      const nuevo = {
+        id: parseInt(document.getElementById("id").value),
+        nombre: document.getElementById("nombre").value,
+        apellido: document.getElementById("apellido").value,
+        posicion: document.getElementById("posicion").value,
+        numero_camiseta: parseInt(document.getElementById("numero").value)
+      };
+
+      try {
+        const response = await fetch("http://localhost:3000/jugadores", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(nuevo)
+        });
+
+        if (!response.ok) {
+          const msg = await response.text();
+
+          if (msg.includes("Duplicate entry") && msg.includes("PRIMARY")) {
+            const confirmar = confirm("⚠️ El ID ya existe. ¿Deseas eliminar ese jugador y reemplazarlo?");
+            if (confirmar) {
+              await fetch(`http://localhost:3000/jugadores/${nuevo.id}`, { method: "DELETE" });
+              await fetch("http://localhost:3000/jugadores", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(nuevo)
+              });
+              alert("Jugador reemplazado exitosamente.");
+              cargarJugadores();
+            }
+            return;
+          }
+
+          throw new Error(msg);
+        }
+
+        formulario.reset();
+        formulario.style.display = "none";
+        cargarJugadores();
+      } catch (error) {
+        console.error("Error al guardar:", error);
+        alert("❌ Error al guardar jugador.");
+      }
+    });
+
+    cargarJugadores();
+  </script>
+</body>
+</html>
+
+
+
