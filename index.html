@@ -5,101 +5,80 @@
   <title>Jugadores de Béisbol</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #1e1e1e;
-      color: #f0f0f0;
-      margin: 0;
-      padding: 30px;
+      font-family: Arial, sans-serif;
+      background: white;
+      color: black;
+      margin: 20px;
     }
 
     h1 {
       text-align: center;
-      color: #e74c3c;
-      margin-bottom: 30px;
     }
 
-    .container {
-      max-width: 1000px;
-      margin: auto;
+    #contenedor-jugadores {
+      max-width: 600px;
+      margin: 20px auto;
     }
 
     .jugador-card {
-      background-color: #2c2c2c;
-      border-radius: 12px;
-      padding: 15px;
-      margin-bottom: 15px;
-      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      transition: transform 0.2s;
     }
 
-    .jugador-card:hover {
-      transform: scale(1.01);
-    }
-
-    .info {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .info span {
-      margin: 2px 0;
-    }
-
-    .acciones {
-      display: flex;
-      gap: 10px;
-    }
-
-    .btn {
-      padding: 8px 12px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
+    .acciones button {
+      background-color: #d9534f;
       color: white;
-      font-size: 14px;
-    }
-
-    .btn-danger {
-      background-color: #e74c3c;
-    }
-
-    .btn-toggle {
-      background-color: #444;
-      margin-bottom: 15px;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      border-radius: 3px;
     }
 
     #formulario {
-      margin-top: 30px;
-      background-color: #2c2c2c;
-      padding: 20px;
-      border-radius: 12px;
+      max-width: 600px;
+      margin: 20px auto;
       display: none;
-    }
-
-    .form-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    input {
-      background-color: #1a1a1a;
-      color: white;
       padding: 10px;
+      border: 1px solid #ccc;
       border-radius: 5px;
-      border: 1px solid #555;
-      width: calc(50% - 10px);
     }
 
-    input::placeholder {
-      color: #aaa;
+    #formulario input {
+      padding: 8px;
+      margin: 5px 0;
+      width: 48%;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+
+    #formulario button {
+      margin-top: 10px;
+      padding: 8px 12px;
+      cursor: pointer;
+      border: none;
+      background-color: #0275d8;
+      color: white;
+      border-radius: 3px;
+    }
+
+    #btn-toggle {
+      display: block;
+      margin: 20px auto;
+      padding: 8px 12px;
+      cursor: pointer;
+      background-color: #5bc0de;
+      border: none;
+      color: white;
+      border-radius: 3px;
     }
 
     @media (max-width: 600px) {
-      input {
+      #formulario input {
         width: 100%;
       }
     }
@@ -108,22 +87,18 @@
 <body>
   <h1>Jugadores de Béisbol</h1>
 
-  <div class="container">
-    <div id="contenedor-jugadores"></div>
+  <div id="contenedor-jugadores"></div>
 
-    <button class="btn btn-toggle" onclick="toggleFormulario()">➕ Agregar Jugador</button>
+  <button id="btn-toggle" onclick="toggleFormulario()">➕ Agregar Jugador</button>
 
-    <form id="formulario">
-      <div class="form-group">
-        <input type="number" id="id" placeholder="ID" required />
-        <input type="text" id="nombre" placeholder="Nombre" required />
-        <input type="text" id="apellido" placeholder="Apellido" required />
-        <input type="text" id="posicion" placeholder="Posición" required />
-        <input type="number" id="numero" placeholder="Número de camiseta" required />
-      </div>
-      <button class="btn btn-danger" type="submit">Guardar jugador</button>
-    </form>
-  </div>
+  <form id="formulario">
+    <input type="number" id="id" placeholder="ID" required />
+    <input type="text" id="nombre" placeholder="Nombre" required />
+    <input type="text" id="apellido" placeholder="Apellido" required />
+    <input type="text" id="posicion" placeholder="Posición" required />
+    <input type="number" id="numero" placeholder="Número de camiseta" required />
+    <button type="submit">Guardar jugador</button>
+  </form>
 
   <script>
     const contenedor = document.getElementById("contenedor-jugadores");
@@ -138,15 +113,14 @@
             const card = document.createElement("div");
             card.className = "jugador-card";
             card.innerHTML = `
-              <div class="info">
-                <span><strong>ID:</strong> ${j.id}</span>
-                <span><strong>Nombre:</strong> ${j.nombre}</span>
-                <span><strong>Apellido:</strong> ${j.apellido}</span>
-                <span><strong>Posición:</strong> ${j.posicion}</span>
-                <span><strong>Número:</strong> ${j.numero_camiseta}</span>
+              <div>
+                <strong>ID:</strong> ${j.id}<br>
+                <strong>Nombre:</strong> ${j.nombre} ${j.apellido}<br>
+                <strong>Posición:</strong> ${j.posicion}<br>
+                <strong>Número:</strong> ${j.numero_camiseta}
               </div>
               <div class="acciones">
-                <button class="btn btn-danger" onclick="eliminar(${j.id})">Eliminar</button>
+                <button onclick="eliminar(${j.id})">Eliminar</button>
               </div>
             `;
             contenedor.appendChild(card);
