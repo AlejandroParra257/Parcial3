@@ -1,17 +1,34 @@
-const url = 'mysql://root:zBtcAmIkxLzxFbVVvUGWPlchohdIDfwv@interchange.proxy.rlwy.net:46438/railway';
-const jugadoresForns = document.getElementById('jugadoresforns');
-const jugadoresContainer = document.getElementById('jugadoresContainer');
-const message = document.getElementById('message');
+const URL = 'https://mi-api-rest.herokuapp.com/jugadores';
 
-async function fetchLibros() {
-  try {
-    const res = await fetch(url);
-    const jugadores = await res.json();
-    renderjugador(jugadores);
-  } catch (err) {
-    showMessage('Error al caragar jugadores', true);
-  }
+function cargarJugadores() {
+  fetch(URL)
+    .then(res => res.json())
+    .then(data => {
+      contenedor.innerHTML = "";
+      data.forEach(j => {
+        const fila = document.createElement("tr");
+        fila.innerHTML = `
+          <td>${j.id}</td>
+          <td>${j.nombre}</td>
+          <td>${j.apellido}</td>
+          <td>${j.posicion}</td>
+          <td>${j.numero_camiseta}</td>
+          <td><button class="btn-eliminar" onclick="eliminar(${j.id})">Eliminar</button></td>
+        `;
+        contenedor.appendChild(fila);
+      });
+    });
 }
+
+function eliminar(id) {
+  fetch(`${URL}/${id}`, {
+    method: "DELETE"
+  }).then(() => cargarJugadores());
+}
+
+// Y para agregar y actualizar también usarías fetch con esa URL base.
+
+
 // const btnMostrarTabla = document.getElementById('btnMostrarTabla');
 //     const btnMostrarFormulario = document.getElementById('btnMostrarFormulario');
 //     const tablaJugadores = document.getElementById('tabla-jugadores');
