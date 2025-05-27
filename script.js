@@ -1,3 +1,4 @@
+const URL = 'https://pro221002217.onrender.com'
 const btnMostrarTabla = document.getElementById('btnMostrarTabla');
     const btnMostrarFormulario = document.getElementById('btnMostrarFormulario');
     const tablaJugadores = document.getElementById('tabla-jugadores');
