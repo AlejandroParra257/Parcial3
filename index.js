@@ -1,7 +1,7 @@
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
-const mysql = require("mysql2/promise");
+const mysql = require("mysql2");
 console.log('MYSQLUSER', process.env.MYSQLUSER);
 
 // const DBHOST = process.env.MYSQLHOST || "localhost";
@@ -23,18 +23,15 @@ const DBUSER = process.env.DBUSER;
 const DBPASSWORD = process.env.DBPASSWORD;
 
 // Conexión a la base de datos
-let connection;
+
 (async () => {
   try {
     connection = await mysql.createConnection({
-      host: process.env.DBHOST,
-      port: process.env.DBPORT,
-      user: process.env.DBUSER,
-      password: process.env.DBPASSWORD,
-      database: process.env.DBDATABASE,
-      ssl:{
-        rejectUnauthorized: false
-      }
+    host: process.env.host || "localHost",
+    port: process.env.port || "3000",
+    user: process.env.user,
+    password: process.env.host,
+    database: process.env.database,
     });
     console.log("✅ Conectado a la base de datos MySQL");
   } catch (err) {
@@ -45,7 +42,7 @@ let connection;
 // Obtener todos los jugadores
 app.get("/jugadores", async (req, res) => {
   try {
-    const [results] = await connection.query("SELECT * FROM JugadoresBeisbol");
+    connection.query("SELECT * FROM JugadoresBeisbol");
     res.json(results);
   } catch (err) {
     console.error(err);
