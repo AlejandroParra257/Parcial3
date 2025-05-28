@@ -4,11 +4,11 @@ const cors = require("cors");
 const mysql = require("mysql2/promise");
 console.log('MYSQLUSER', process.env.MYSQLUSER);
 
-const DBHOST = process.env.MYSQLHOST || "localhost";
-const DBPORT = process.env.MYSQLPORT || 3306;
-const DBDATABASE = process.env.MYSQLDATABASE || "bdL22100217";
-const DBUSER = process.env.MYSQLUSER || "root";
-const DBPASSWORD = process.env.MYSQLROOTPASSWORD || "";
+// const DBHOST = process.env.MYSQLHOST || "localhost";
+// const DBPORT = process.env.MYSQLPORT || 3306;
+// const DBDATABASE = process.env.MYSQLDATABASE || "bdL22100217";
+// const DBUSER = process.env.MYSQLUSER || "root";
+// const DBPASSWORD = process.env.MYSQLROOTPASSWORD || "";
 
 const app = express();
 app.use(express.json());
