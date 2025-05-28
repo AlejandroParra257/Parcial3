@@ -28,7 +28,7 @@ const DBPASSWORD = process.env.DBPASSWORD;
   try {
     connection = await mysql.createConnection({
     host: process.env.host || "localHost",
-    port: process.env.port || "3000",
+    port: process.env.port || "3306",
     user: process.env.user,
     password: process.env.host,
     database: process.env.database,
