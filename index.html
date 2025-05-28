@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <title>Jugadores de Béisbol</title>
   <style>
+    /* Estilos igual que antes */
     body {
       font-family: Arial, sans-serif;
       background: white;
@@ -114,8 +115,10 @@
       <button type="submit">Guardar jugador</button>
     </form>
   </div>
-  
-   <script>
+
+  <script>
+    const API_BASE_URL = "https://proyec-kb0l.onrender.com";
+
     const btnMostrarTabla = document.getElementById('btnMostrarTabla');
     const btnMostrarFormulario = document.getElementById('btnMostrarFormulario');
     const tablaJugadores = document.getElementById('tabla-jugadores');
@@ -146,7 +149,7 @@
 
     // Cargar y mostrar jugadores en la tabla
     function cargarJugadores() {
-      fetch("http://localhost:3000/jugadores")
+      fetch(`${API_BASE_URL}/jugadores`)
         .then(res => res.json())
         .then(data => {
           contenedor.innerHTML = "";
@@ -167,7 +170,7 @@
 
     // Función para eliminar jugador
     function eliminar(id) {
-      fetch(`http://localhost:3000/jugadores/${id}`, {
+      fetch(`${API_BASE_URL}/jugadores/${id}`, {
         method: "DELETE"
       }).then(() => cargarJugadores());
     }
@@ -185,7 +188,7 @@
       };
 
       try {
-        const response = await fetch("http://localhost:3000/jugadores", {
+        const response = await fetch(`${API_BASE_URL}/jugadores`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(nuevo)
@@ -197,8 +200,8 @@
           if (msg.includes("Duplicate entry") && msg.includes("PRIMARY")) {
             const confirmar = confirm("⚠️ El ID ya existe. ¿Deseas eliminar ese jugador y reemplazarlo?");
             if (confirmar) {
-              await fetch(`http://localhost:3000/jugadores/${nuevo.id}`, { method: "DELETE" });
-              await fetch("http://localhost:3000/jugadores", {
+              await fetch(`${API_BASE_URL}/jugadores/${nuevo.id}`, { method: "DELETE" });
+              await fetch(`${API_BASE_URL}/jugadores`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(nuevo)
@@ -224,10 +227,8 @@
     // Mostrar tabla al cargar la página
     mostrarTabla();
   </script>
- 
+
 </body>
 </html>
-
-
 
 
