@@ -16,6 +16,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan("combined"));
 app.use(cors());
 
+const DBHOST = process.env.DBHOST;
+const DBPORT = process.env.DBPORT || 3306;
+const DBDATABASE = process.env.DBDATABASE;
+const DBUSER = process.env.DBUSER;
+const DBPASSWORD = process.env.DBPASSWORD;
+
 // Conexión a la base de datos
 let connection;
 (async () => {
