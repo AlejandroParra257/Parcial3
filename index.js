@@ -20,11 +20,14 @@ let connection;
 (async () => {
   try {
     connection = await mysql.createConnection({
-      host: DBHOST,
-      port: DBPORT,
-      user: DBUSER,
-      password: DBPASSWORD,
-      database: DBDATABASE,
+      host: process.env.DBHOST,
+      port: process.env.DBPORT,
+      user: process.env.DBUSER,
+      password: process.env.DBPASSWORD,
+      database: process.env.DBDATABASE,
+      ssl:{
+        rejectUnauthorized: false
+      }
     });
     console.log("✅ Conectado a la base de datos MySQL");
   } catch (err) {
