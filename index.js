@@ -2,6 +2,7 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const mysql = require("mysql2/promise");
+console.log('MYSQLUSER', process.env.MYSQLUSER);
 
 const DBHOST = process.env.MYSQLHOST || "localhost";
 const DBPORT = process.env.MYSQLPORT || 3306;
