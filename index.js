@@ -2,8 +2,7 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const mysql = require("mysql2/promise");
-mysql://root:zBtcAmIkxLzxFbVVvUGWPlchohdIDfwv@interchange.proxy.rlwy.net:46438/railway
-// Variables de entorno desde Railway
+
 const DBHOST = process.env.MYSQLHOST || "localhost";
 const DBPORT = process.env.MYSQLPORT || 3306;
 const DBDATABASE = process.env.MYSQLDATABASE || "bdL22100217";
